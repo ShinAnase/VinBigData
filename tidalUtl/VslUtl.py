@@ -11,7 +11,7 @@ cust_palt = ['#111d5e','#c70039','#37b448','#B43757', '#ffbd69', '#ffc93c','#FFF
 #指定列のカテゴリカルな特徴量のヒストグラムをtrain, testの順に並べる。
 #in  :train data, testdata, visualizing column name
 #out :-
-def histCategory(dfTrain, dfTest, clmnNm):
+def histCategory(dfTrain, clmnNm, dfTest=None):
     figure = plt.figure(figsize=(12, 4))
     gs_master = GridSpec(nrows=1, ncols=2, figure=figure)
     
@@ -29,18 +29,19 @@ def histCategory(dfTrain, dfTest, clmnNm):
                 ha='center')
     
     
-    ax2 = figure.add_subplot(gs_master[0, 1])
-    ax2.set_title("Test " + clmnNm,weight='bold')
-    sns.countplot(x=clmnNm,
-                  data=dfTest,
-                  ax=ax2,
-                  order=dfTest[clmnNm].value_counts().index)
-    total = float(len(dfTest[clmnNm]))
-    for p in ax2.patches:
-        ax2.text(p.get_x() + p.get_width() / 2., #width(x) :get_xは棒グラフの左端の位置
-                p.get_height() + 2, #height(y)
-                '{:1.2f}%'.format((p.get_height() / total) * 100),
-                ha='center')
+    if dfTest is not None:
+        ax2 = figure.add_subplot(gs_master[0, 1])
+        ax2.set_title("Test " + clmnNm,weight='bold')
+        sns.countplot(x=clmnNm,
+                      data=dfTest,
+                      ax=ax2,
+                      order=dfTest[clmnNm].value_counts().index)
+        total = float(len(dfTest[clmnNm]))
+        for p in ax2.patches:
+            ax2.text(p.get_x() + p.get_width() / 2., #width(x) :get_xは棒グラフの左端の位置
+                    p.get_height() + 2, #height(y)
+                    '{:1.2f}%'.format((p.get_height() / total) * 100),
+                    ha='center')
     
     return
 
